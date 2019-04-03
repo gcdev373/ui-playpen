@@ -1,35 +1,42 @@
 import React, { useCallback, useState } from 'react';
-import logo from './logo.svg';
+
 import './App.css';
 
-/**
- * You want a Function component rather than a Class component.
- * Hooks essentially are there to retire the old class based component.
- */
+
+import {Client, ApiResponse, RequestParams} from '@elastic/elasticsearch';
+const client = new Client ({node: 'http://localhost:9200' });
+
 const App: React.FunctionComponent = () => {
+  
   const [count, setCount] = useState<number>(0);
 
   const increment = useCallback(() =>
     setCount(count + 1)
     , [count, setCount])
 
+    const params: RequestParams.Search =
+        {
+          index: 'git-*',
+          body: { user: 'stroomdev66'}
+        }
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-          </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-          </a>
-        <p>The Count is {count}</p>
-        <button onClick={increment}>Increment</button>
+        
+        <p>That dev has committed {count} objects</p>
+        {
+        }
+        <button onClick={
+          client.search(params).then ((result : ApiResponse) => {
+            console.log ("The results are in");
+            console.log (result.body.hits.hits);
+          })
+          .catch ((err : Error) =>  {
+            console.log(err);
+          })
+         
+          }>Increment</button>
       </header>
     </div>
   );
