@@ -14,12 +14,12 @@ import { WeatherReponse } from './types';
  * the getWeather function gives the owning component a way to request the weather for a new city.
  * Notice that the getWeather function here returns VOID instead of a promise.
  */
-interface WeatherRestApi {
+interface UseWeather {
   weather?: WeatherReponse;
   getWeather: (city: string) => void;
 }
 
-const useWeather = (): WeatherRestApi => {
+const useWeather = (): UseWeather => {
   const { getWeather } = useWeatherRestApi();
   const [weather, setWeather] = React.useState<WeatherReponse | undefined>(undefined);
 
